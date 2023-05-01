@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Task List</h1>
+    <form th:action="@{/tasks}" method="post" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="description" class="form-control" placeholder="New task" required>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.description}"></td>
+            <td th:text="${task.completed} ? 'Completed' : 'Pending'"></td>
+            <td>
+                <form th:action="@{'/tasks/' + ${task.id} + '/toggle'}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm" th:class="${task.completed} ? 'btn-warning' : 'btn-success'">
+                        <span th:text="${task.completed} ? 'Mark Pending' : 'Mark Completed'"></span>
+                    </button>
+                </form>
+                <form th:action="@{'/tasks/' + ${task.id} + '/delete'}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
